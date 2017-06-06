@@ -1,6 +1,7 @@
 import os 
 import os.path 
 import random 
+import functools
 
 numdirs = 0
 
@@ -25,12 +26,12 @@ def recipe_generator(n):
 		n .txt files containing recipes 
 	"""
 
-def dir_generator(n, max_phones, max_recipes, dircount=0, depth=0):
+def dir_generator(n, max_phones, max_recipes, dircount=0, max_depth=10):
 	""" Takes as input an int n, and randomly generates a 
 		tree of n nested subdirectories 
 	"""
 	global numdirs # use the same numdirs we were already counting
-	if dircount>n: # base case 
+	if dircount>n or max_depth == 0: # base case 
 		return 
 	first_dir = os.getcwd() # so that we can return here after finishing
 	while numdirs < n: 
@@ -39,14 +40,17 @@ def dir_generator(n, max_phones, max_recipes, dircount=0, depth=0):
 		numdirs += 1			  # account for this change
 		num_children = random.choice([1,2,3,4,5]) # decide how many children it has
 		children = 0
-		print(depth, numdirs)
-		while children < num_children: 		 # iterate through each child dir
-			dirs_left = n-numdirs		 # make sure we don't go over
-			next_n = dirs_left//num_children # evenly partition dirs left btw childs
-			depthhhh = depth+1
-			dir_generator(next_n,max_phones,max_recipes,dircount=numdirs, depth=depthhhh)
+		dirs_left = n-numdirs		 # make sure we don't go over
+		partition_pts = [random.randint(0,dirs_left) for i in range(num_children)]
+		n_values = [partition_pts[0]] + [partition_pts[i] - partition_pts[i-1] for i in range(1, len(partition_pts))]
+		while children < num_children: 	 # iterate through each child dir
+			os.makedirs(str(numdirs))
+			os.chdir(str(numdirs))
+			numdirs += 1
+			next_n = n_values[children]
+			dir_generator(next_n,max_phones,max_recipes,dircount=numdirs, max_depth = max_depth-1)
 			children += 1
-			print(depth,numdirs)
+			os.chdir('..')
 		os.chdir('..')
 	os.chdir(first_dir) # return to where the function was called
 
