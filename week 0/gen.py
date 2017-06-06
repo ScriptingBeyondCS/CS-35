@@ -26,40 +26,37 @@ def recipe_generator(n):
 		n .txt files containing recipes 
 	"""
 
-def dir_generator(n, max_phones=None, max_recipes=None, dircount=0, max_depth=5):
+def dir_generator(n, depth):
 	""" Takes as input an int n, and randomly generates a 
 		tree of n nested subdirectories 
 	"""
-	# use the same num_dirs we were already counting
 	global num_dirs 
 	global max_dirs
-	# base case
-	if num_dirs>max_dirs or max_depth == 0: 
-		print(max_dirs>n, max_depth==0, os.getcwd())
+	global max_depth
+	if num_dirs>max_dirs or depth > max_depth: 
+		print(num_dirs>max_dirs, depth>max_depth, os.getcwd())
 		return 
-
-	# so that we can return to where we started when we finish
-	while num_dirs < n: 						  # make dirs until we have n
-		os.makedirs(str(num_dirs)) 				  # make a unique dir 
-		os.chdir(str(num_dirs)) 	  			  # move into it
-		num_dirs += 1			  				  # we have 1 more dir now
-		# determine how many children this dir will have
-		num_children = random.choice([5,6,7,8,9,10]) 
-		# now we try to partition the number of subdirectories each gets
-		partition_pts = sorted([random.randrange(num_dirs) for i in range(num_children)])
+	# numdirs = 0
+	# os.makedirs(str(num_dirs))
+	# os.chdir(str(num_dirs))
+	# num_dirs += 1
+	# numdirs += 1
+	num_children = random.choice([3,4,5,6,7]) 
+	# partition_pts = sorted([random.randrange(num_dirs) for i in range(num_children)])
+	try:
+		partition_pts = sorted([random.randrange(n) for i in range(num_children)])
 		n_values = [partition_pts[0]] + [partition_pts[i] - partition_pts[i-1] for i in range(1,num_children)]
-		# print(n_values)
 		children = 0
-		while children < num_children: 	 # iterate through each child dir
+		while children < num_children: 	 
 			os.makedirs(str(num_dirs))
 			os.chdir(str(num_dirs))
 			num_dirs += 1
 			next_n = n_values[children]
-			dir_generator(next_n,max_phones,max_recipes,dircount=num_dirs, max_depth = max_depth-1)
+			dir_generator(next_n, depth+1)
 			children += 1
 			os.chdir('..')
-		os.chdir('..')
-	os.chdir(first_dir) # return to where the function was called
+	except: 
+		return
 
 def tree_generator(n, max_phones, max_recipes):
 	""" Takes as input an int n, and randomly generates a 
@@ -89,16 +86,17 @@ def main_generator(n):
 	global original_dir
 	global num_dirs
 	global max_dirs 
+	global max_depth
 	max_dirs = n
+	max_depth = 5
 	original_dir = os.getcwd()
 	os.makedirs("tree")
 	os.chdir("tree")
-	dir_generator(n,dircount=num_dirs)
-	# tree_generator(n,max_phones,max_recipes)
+	dir_generator(n, 0)
 
 
 def main():
 	""" main takes no arguments 
 	"""
 
-main_generator(1000)
+main_generator(10000)
