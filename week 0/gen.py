@@ -32,21 +32,23 @@ def dir_generator(n, max_phones=None, max_recipes=None, dircount=0, max_depth=5)
 	"""
 	# use the same num_dirs we were already counting
 	global num_dirs 
-
+	global max_dirs
 	# base case
-	if dircount>n or max_depth == 0: 
+	if num_dirs>max_dirs or max_depth == 0: 
+		print(max_dirs>n, max_depth==0, os.getcwd())
 		return 
 
 	# so that we can return to where we started when we finish
-	first_dir = os.getcwd() 
 	while num_dirs < n: 						  # make dirs until we have n
 		os.makedirs(str(num_dirs)) 				  # make a unique dir 
 		os.chdir(str(num_dirs)) 	  			  # move into it
 		num_dirs += 1			  				  # we have 1 more dir now
-		num_children = random.choice([1,2,3,4,5]) # decide how many children it has
+		# determine how many children this dir will have
+		num_children = random.choice([5,6,7,8,9,10]) 
 		# now we try to partition the number of subdirectories each gets
-		partition_pts = [random.randint(0,n-1) for i in range(num_children)] 
-		n_values = [partition_pts[0]] + [partition_pts[i] - partition_pts[i-1] for i in range(1, len(partition_pts))]
+		partition_pts = sorted([random.randrange(num_dirs) for i in range(num_children)])
+		n_values = [partition_pts[0]] + [partition_pts[i] - partition_pts[i-1] for i in range(1,num_children)]
+		# print(n_values)
 		children = 0
 		while children < num_children: 	 # iterate through each child dir
 			os.makedirs(str(num_dirs))
@@ -86,6 +88,8 @@ def tree_generator(n, max_phones, max_recipes):
 def main_generator(n):
 	global original_dir
 	global num_dirs
+	global max_dirs 
+	max_dirs = n
 	original_dir = os.getcwd()
 	os.makedirs("tree")
 	os.chdir("tree")
