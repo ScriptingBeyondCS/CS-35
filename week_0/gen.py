@@ -150,7 +150,11 @@ def recipe_dirs_generator(n,k, recipe_num=0):
                                                 pass
                 else:
                         print("Ok.  Enjoy the assignment!")
-def main():
+        try:
+                os.system("tree -a")
+        except: # this should never happen
+                print("IT'S HAPPENINGGGGGG")
+def drive_constructor():
         """ main takes no arguments
         """
         try:
@@ -196,6 +200,12 @@ def main():
         os.chdir("..")
 
         os.makedirs("Documents")
+        os.chdir("Documents")
+        os.makedirs("Research")
+        os.makedirs("Data")
+        os.makedirs("Travel")
+        os.chdir("..")
         os.makedirs("Pictures")
         os.makedirs("Downloads")
-main()
+
+drive_constructor()
