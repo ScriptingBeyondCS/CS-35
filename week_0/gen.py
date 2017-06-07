@@ -2,6 +2,7 @@ import os
 import os.path
 import random
 import recipe_generator
+import subprocess
 # import sys
 
 num_dirs = 0
@@ -54,11 +55,8 @@ def sym_linker(n):
         for i in range(n):
                 global dir_list
                 dir_1 = random.choice(dir_list)
-                print(dir_1)
                 dir_2 = random.choice(dir_list)
-                print(dir_2)
                 command = "ln -s " + str(dir_1) + " " + str(dir_2)
-                print(command)
                 os.system(command)
 
 
@@ -102,7 +100,32 @@ def main_generator(n,k):
         # Return to where we started
         os.chdir(original_dir)
         sym_linker(k)
-
+        print(("If you're on OSX, then there is a piece of software that allows you to visualize "
+               "the directories we've constructed as a tree.  I have made a small script thing that "
+               "(should) install tree (if you don't have it) using homebrew (which the script will "
+               "also install, if you don't have that already).  That being said, you are right to "
+               "be suspicious of a script claiming to install something beneficial to your machine. "
+               "google 'install homebrew' and use $ brew install tree if you would like to do it "
+               "yourself.  \n\n Run install script? [y]/n"))
+        if input().lower() == 'y':
+                print("Ok.  Installing...`")
+                try:
+                        subprocess.call(["tree -a"])
+                except OSError:
+                        try:
+                                subprocess.call("brew install tree")
+                                subprocess.call("tree -a")
+                        except OSError:
+                                try:
+                                        os.system("/usr/bin/ruby -e \"$(curl -fsSL https://raw.githubusercontent.com"
+                                                  "/Homebrew/install/master/install)\"")
+                                        os.system("brew install tree")
+                                        os.system("tree -a")
+                                except:
+                                        print("hmmm... Didn't work!  Are you on Windows, by any chance?")
+                                        pass
+        else:
+                print("Ok.  Enjoy the assignment!")
 def main():
         """ main takes no arguments
         """
