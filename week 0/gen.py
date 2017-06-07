@@ -2,22 +2,21 @@ import os
 import os.path
 import random
 import recipe_generator
+import sysn
 
 num_dirs = 0
-
-def phone_number_gen(n):
-	""" Takes as input an int n, and randomly generates
-		n phone numbers of various styles
-	"""
-
-def dir_generator(n, depth):
-	""" Takes as input an int n, and randomly generates a
-		tree of n nested subdirectories
+# ln -s
+def dir_generator(n, depth, dirtype_string=""):
+	""" Takes as input an int n, an int depth, and a string
+            dirtype_string, then randomly generates a tree of
+            n directories, with max depth depth.  Each of these
+            files will be named corresponding to dirtype_string.
 	"""
 	### Get global tallies
 	global num_dirs  # So that we don't have to pass current dirs whenever we call
 	global max_dirs	 # Max dir number
 	global max_depth # Don't want files nested deeper than this
+        global dir_list  # Write out dir paths as we make them
 
 	### Base cases
 	if num_dirs>max_dirs or depth > max_depth or n==0:
@@ -37,15 +36,22 @@ def dir_generator(n, depth):
 	## Loop through all of the children
 	children = 0 # number of children we've called the function on so far
 	while children < num_children:
-		os.makedirs(str(num_dirs)) 		# make child dir
-		os.chdir(str(num_dirs))	   		# move into it
-		num_dirs += 1			   		# account for this change
-		next_n = n_values[children] 	# find how many subdirs the child gets
-		dir_generator(next_n, depth+1)  # recurse!
-		children += 1					# called the function on one more child
-		os.chdir('..')					# move back to parent dir
+                dir_name = dirtype_string + str(numdirs)# name the dir accordingly
+		os.makedirs(str(dir_name)) 		# make child dir
+		os.chdir(str(dir_name))	   		# move into it
+                dir_list.append(os.getcwd())            # store the dir_name in the list for interlacing
+		num_dirs += 1			   	# account for this change
+		next_n = n_values[children] 	        # find how many subdirs the child gets
+		dir_generator(next_n, depth+1)          # recurse!
+		children += 1				# called the function on one more child
+		os.chdir('..')				# move back to parent dir
 
-
+def sym_linker(dir_list):
+        """ sym_linker takes no inputs
+        """
+        global dir_list
+        dir_1 = random.choice(dir_list)
+        dir_2 = random.choice(dir_list)
 
 def main_generator(n):
 	## Global vars
@@ -64,6 +70,9 @@ def main_generator(n):
 	# Maximum number of layers for file tree
 	global max_depth
 	max_depth = 7
+
+        global dir_list
+        dir_list = []
 
 	##
 	# Make a tree directory to not clutter workspace
