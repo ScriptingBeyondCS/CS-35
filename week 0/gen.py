@@ -1,100 +1,91 @@
-import os 
-import os.path 
-import random 
-import functools
+import os
+import os.path
+import random
+import recipe_generator
+import sysn
 
 num_dirs = 0
-
-# finish these later 
-discrete_ingredients = ['eggs', 'pears', 'apples', 'oranges', 'onions']
-by_weight_ingredients = ['flour', 'peanuts', 'frozen blueberries', 'mushrooms', 'chevre']
-by_volume_ingredients = ['cinnamon', 'brown sugar', 'milk', '']
-meat_ingredients = ['chicken', 'beef', 'pork']
-fish = ['salmon', 'tilapia', 'halibut', 'cod', 'tuna']
-
-weights = ['kilograms', 'ounces', 'grams', 'pounds']
-volumes = ['cups', 'teaspoons', 'tablespoons']
-
-def phone_number_gen(n):
-	""" Takes as input an int n, and randomly generates 
-		n phone numbers of various styles 
+# ln -s
+def dir_generator(n, depth, dirtype_string=""):
+	""" Takes as input an int n, an int depth, and a string
+            dirtype_string, then randomly generates a tree of
+            n directories, with max depth depth.  Each of these
+            files will be named corresponding to dirtype_string.
 	"""
+	### Get global tallies
+	global num_dirs  # So that we don't have to pass current dirs whenever we call
+	global max_dirs	 # Max dir number
+	global max_depth # Don't want files nested deeper than this
+        global dir_list  # Write out dir paths as we make them
 
+	### Base cases
+	if num_dirs>max_dirs or depth > max_depth or n==0:
+		# print(num_dirs>max_dirs, depth>max_depth, n==0, os.getcwd())
+		return
 
-def recipe_generator(n):
-	""" Takes as input an int n, and randomly generates
-		n .txt files containing recipes 
-	"""
+	### Main function body
+	# How many subdirectories do we want to make here?
+	num_children = random.choice([3,4,5,6,7])
 
-def dir_generator(n, max_phones=None, max_recipes=None, dircount=0, max_depth=5):
-	""" Takes as input an int n, and randomly generates a 
-		tree of n nested subdirectories 
-	"""
-	# use the same num_dirs we were already counting
-	global num_dirs 
+	## Distribute the n directories between each of the subdirectories
+	# pick some random numbers on the interval
+	partition_pts = sorted([random.randrange(n) for i in range(num_children)])
+	# take the differences between them --> [1,2,3,5] --> [1,1,1,2]
+	# tells us the "size" of each part of our partition.
+	n_values = [partition_pts[0]] + [partition_pts[i] - partition_pts[i-1] for i in range(1,num_children)]
+	## Loop through all of the children
+	children = 0 # number of children we've called the function on so far
+	while children < num_children:
+                dir_name = dirtype_string + str(numdirs)# name the dir accordingly
+		os.makedirs(str(dir_name)) 		# make child dir
+		os.chdir(str(dir_name))	   		# move into it
+                dir_list.append(os.getcwd())            # store the dir_name in the list for interlacing
+		num_dirs += 1			   	# account for this change
+		next_n = n_values[children] 	        # find how many subdirs the child gets
+		dir_generator(next_n, depth+1)          # recurse!
+		children += 1				# called the function on one more child
+		os.chdir('..')				# move back to parent dir
 
-	# base case
-	if dircount>n or max_depth == 0: 
-		return 
-
-	# so that we can return to where we started when we finish
-	first_dir = os.getcwd() 
-	while num_dirs < n: 						  # make dirs until we have n
-		os.makedirs(str(num_dirs)) 				  # make a unique dir 
-		os.chdir(str(num_dirs)) 	  			  # move into it
-		num_dirs += 1			  				  # we have 1 more dir now
-		num_children = random.choice([1,2,3,4,5]) # decide how many children it has
-		# now we try to partition the number of subdirectories each gets
-		partition_pts = [random.randint(0,n-1) for i in range(num_children)] 
-		n_values = [partition_pts[0]] + [partition_pts[i] - partition_pts[i-1] for i in range(1, len(partition_pts))]
-		children = 0
-		while children < num_children: 	 # iterate through each child dir
-			os.makedirs(str(num_dirs))
-			os.chdir(str(num_dirs))
-			num_dirs += 1
-			next_n = n_values[children]
-			dir_generator(next_n,max_phones,max_recipes,dircount=num_dirs, max_depth = max_depth-1)
-			children += 1
-			os.chdir('..')
-		os.chdir('..')
-	os.chdir(first_dir) # return to where the function was called
-
-def tree_generator(n, max_phones, max_recipes):
-	""" Takes as input an int n, and randomly generates a 
-		tree of n nested subdirectories 
-	"""
-	original_dir = os.getcwd()
-	os.makedirs("treea")
-	os.chdir("treea")
-	first_dir = os.getcwd()
-	num_dirs = 0
-	while num_dirs < n: 
-		os.makedirs(str(num_dirs))
-		choice = random.choice([2,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0])
-		if choice==1:
-			os.chdir(str(num_dirs))
-			num_dirs += 1
-		elif choice==0: 
-			if os.getcwd() != first_dir:
-				os.chdir("..")
-			num_dirs += 1
-		else:
-			os.chdir(first_dir)
-			num_dirs += 1
-	os.chdir(original_dir)
+def sym_linker(dir_list):
+        """ sym_linker takes no inputs
+        """
+        global dir_list
+        dir_1 = random.choice(dir_list)
+        dir_2 = random.choice(dir_list)
 
 def main_generator(n):
+	## Global vars
+	# To return to once done (just in case)
 	global original_dir
-	global num_dirs
 	original_dir = os.getcwd()
-	os.makedirs("tree")
-	os.chdir("tree")
-	dir_generator(n,dircount=num_dirs)
-	# tree_generator(n,max_phones,max_recipes)
 
+	# Set a global tally of the number of dirs we've made so far
+	global num_dirs
+	num_dirs = 0
+
+	# Set a global limit on the global tally!
+	global max_dirs
+	max_dirs = n
+
+	# Maximum number of layers for file tree
+	global max_depth
+	max_depth = 7
+
+        global dir_list
+        dir_list = []
+
+	##
+	# Make a tree directory to not clutter workspace
+	os.makedirs("tree")
+	# Move into tree directory
+	os.chdir("tree")
+	# Create n subdirectories
+	dir_generator(n, 0)
+	# Return to where we started
+	os.chdir(original_dir)
 
 def main():
-	""" main takes no arguments 
+	""" main takes no arguments
 	"""
 
-main_generator(1000)
+main_generator(10000)
