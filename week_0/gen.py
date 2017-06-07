@@ -7,7 +7,7 @@ import subprocess
 
 num_dirs = 0
 # ln -s
-def dir_generator(n, depth, dirtype_string=""):
+def dir_generator(n, depth, max_recipes=0,  dirtype_string=""):
         """ Takes as input an int n, an int depth, and a string
             dirtype_string, then randomly generates a tree of
             n directories, with max depth depth.  Each of these
@@ -22,7 +22,15 @@ def dir_generator(n, depth, dirtype_string=""):
         ### Base cases
         if num_dirs>max_dirs or depth > max_depth or n==0:
                 # print(num_dirs>max_dirs, depth>max_depth, n==0, os.getcwd())
+                if max_recipes>0:
+                        num_recipes = random.choice(list(range(1,max_recipes)))
+                        recipe_generator.generate_recipes(num_recipes)
                 return
+
+        if max_recipes>0:
+                num_recipes = random.choice(list(range(1,max_recipes)))
+                recipe_generator.generate_recipes(num_recipes)
+
 
         ### Main function body
         # How many subdirectories do we want to make here?
@@ -43,7 +51,7 @@ def dir_generator(n, depth, dirtype_string=""):
                 dir_list.append(os.getcwd())            # store the dir_name in the list for interlacing
                 num_dirs += 1                           # account for this change
                 next_n = n_values[children]             # find how many subdirs the child gets
-                dir_generator(next_n, depth+1)          # recurse!
+                dir_generator(next_n, depth+1, max_recipes = max_recipes)          # recurse!
                 children += 1                           # called the function on one more child
                 os.chdir('..')                          # move back to parent dir
 
@@ -60,7 +68,7 @@ def sym_linker(n):
                 os.system(command)
 
 
-def main_generator(n,k):
+def main_generator(n,k, recipe_num=0):
         """ main_generator takes as input an int, n
             and another int, k.  n determines the total
             number of max nested subdirectories we will
@@ -96,38 +104,41 @@ def main_generator(n,k):
                 os.makedirs("tree")       # and make a new one
         os.chdir("tree")
         # Create n subdirectories
-        dir_generator(n, 0)
+        dir_generator(n, 0, max_recipes=recipe_num)
         # Return to where we started
         os.chdir(original_dir)
         sym_linker(k)
-        print(("If you're on OSX, then there is a piece of software that allows you to visualize "
-               "the directories we've constructed as a tree.  I have made a small script thing that "
-               "(should) install tree (if you don't have it) using homebrew (which the script will "
-               "also install, if you don't have that already).  That being said, you are right to "
-               "be suspicious of a script claiming to install something beneficial to your machine. "
-               "google 'install homebrew' and use $ brew install tree if you would like to do it "
-               "yourself.  \n\n Run install script? [y]/n"))
-        if input().lower() == 'y':
-                print("Ok.  Installing...`")
-                try:
-                        subprocess.call(["tree -a"])
-                except OSError:
+        try:
+                subprocess.call("tree -a")
+        except OSError:
+                print(("If you're on OSX, then there is a piece of software that allows you to visualize "
+                       "the directories we've constructed as a tree.  I have made a small script thing that "
+                       "(should) install tree (if you don't have it) using homebrew (which the script will "
+                       "also install, if you don't have that already).  That being said, you are right to "
+                       "be suspicious of a script claiming to install something beneficial to your machine. "
+                       "google 'install homebrew' and use $ brew install tree if you would like to do it "
+                       "yourself.  \n\n Run install script? [y]/n"))
+                if input().lower() == 'y':
+                        print("Ok.  Installing...`")
                         try:
-                                subprocess.call("brew install tree")
                                 subprocess.call("tree -a")
                         except OSError:
                                 try:
-                                        os.system("/usr/bin/ruby -e \"$(curl -fsSL https://raw.githubusercontent.com"
+                                        subprocess.call("brew install tree")
+                                        subprocess.call("tree -a")
+                                except OSError:
+                                        try:
+                                                os.system("/usr/bin/ruby -e \"$(curl -fsSL https://raw.githubusercontent.com"
                                                   "/Homebrew/install/master/install)\"")
-                                        os.system("brew install tree")
-                                        os.system("tree -a")
-                                except:
-                                        print("hmmm... Didn't work!  Are you on Windows, by any chance?")
-                                        pass
-        else:
-                print("Ok.  Enjoy the assignment!")
+                                                os.system("brew install tree")
+                                                os.system("tree -a")
+                                        except:
+                                                print("hmmm... Didn't work!  Are you on Windows, by any chance?")
+                                                pass
+                else:
+                        print("Ok.  Enjoy the assignment!")
 def main():
         """ main takes no arguments
         """
 
-main_generator(10000, 100)
+main_generator(10000, 100, 10)
