@@ -22,7 +22,7 @@ crust = ['flour', 'sugar', 'butter', 'shortening', 'salt']
 
 all_ingredients = meats+meat_spices+vegetables+fruits+fruit_spices+crust
 
-def recipe_generator(n):
+def generate_recipes(n):
 	""" Takes as input an int n, and randomly generates
 		n .txt files containing recipes
 	"""
