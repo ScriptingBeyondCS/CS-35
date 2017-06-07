@@ -92,7 +92,7 @@ def print_instructions(my_file, all_chosen_ingredients):
 def main():
 	""" Main
 	"""
-	recipe_generator(5)
+	generate_recipes(5)
 
 if __name__ == '__main__':
 	main()
