@@ -154,10 +154,10 @@ def recipe_dirs_generator(n,k, recipe_num=0):
                 os.system("tree -a")
         except: # this should never happen
                 print("IT'S HAPPENINGGGGGG")
-def drive_constructor():
+def main_drive_constructor():
         """ Drive_constructor takes no arguments.  Calling it will
             create a fictitious grutor's hard drive, complete with
-            nested file directory to
+            nested file directory to recipes etc.
         """
         try:
                 subprocess.call("mkdir kidnapped_grutor")
@@ -166,6 +166,63 @@ def drive_constructor():
                 os.makedirs("kidnapped_grutor")
         #### Make grutor's hard drive directory
         os.chdir("kidnapped_grutor")
+
+        ### Make computer directories
+        ##
+        os.makedirs("Applications")
+        ##
+        os.makedirs("Music")
+        ##
+        os.makedirs("Movies")
+
+
+        ##
+        os.makedirs("Desktop")
+        os.chdir("Desktop")
+        #
+        recipe_dirs_generator(1000, 0, recipe_num = 5)
+        #
+        os.makedirs("Desktop_1")
+        os.chdir("Desktop_1")
+        os.makedirs("Screenshots")
+        os.makedirs("More screenshots")
+        os.makedirs("stuff")
+        os.makedirs("fklasdfjewa")
+        os.chdir("..")
+        #
+        os.makedirs("Desktop_2016")
+        os.chdir("Desktop_2016")
+        os.makedirs("Research")
+        os.makedirs("blah")
+        os.makedirs("thingys")
+        os.makedirs("Desktop cleaning purge")
+        os.chdir("..")
+        #
+        os.makedirs("Screenshots")
+        os.chdir("..")
+
+        os.makedirs("Documents")
+        os.chdir("Documents")
+        os.makedirs("Research")
+        os.makedirs("Data")
+        os.makedirs("Travel")
+        os.chdir("..")
+        os.makedirs("Pictures")
+        os.makedirs("Downloads")
+
+def extra_credit_drive_constructor():
+        """ this drive_constructor takes no arguments.  Calling it will
+            create a fictitious grutor's hard drive.  Here, symlinks
+            are inserted to make the file structure a graph instead
+            of a tree (at least, in some sense)
+        """
+        try:
+                subprocess.call("mkdir kidnapped_grutor_EC")
+        except OSError:
+                os.system("rm -rf kidnapped_grutor_EC/")
+                os.makedirs("kidnapped_grutor_EC")
+        #### Make grutor's hard drive directory
+        os.chdir("kidnapped_grutor_EC")
 
         ### Make computer directories
         ##
@@ -210,4 +267,6 @@ def drive_constructor():
         os.makedirs("Pictures")
         os.makedirs("Downloads")
 
-drive_constructor()
+main_drive_constructor()
+
+extra_credit_drive_constructor()
