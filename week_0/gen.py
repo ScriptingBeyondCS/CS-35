@@ -180,7 +180,7 @@ def drive_constructor():
         os.makedirs("Desktop")
         os.chdir("Desktop")
         #
-        recipe_dirs_generator(100, 100, recipe_num = 5)
+        recipe_dirs_generator(100, 500, recipe_num = 5)
         #
         os.makedirs("Desktop_1")
         os.chdir("Desktop_1")
