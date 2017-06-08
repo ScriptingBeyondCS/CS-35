@@ -22,23 +22,28 @@ crust = ['flour', 'sugar', 'butter', 'shortening', 'salt']
 
 all_ingredients = meats+meat_spices+vegetables+fruits+fruit_spices+crust
 
-def generate_recipes(n):
-	""" Takes as input an int n, and randomly generates
-		n .txt files containing recipes
+def generate_recipes(upper_num, lower_num = 0):
+	""" Takes as input a range, and randomly generates upper_num-lower_num
+		 .txt files containing recipes, named with the given range
 	"""
-	for i in range(n):
-		f = open("recipe"+str(i+1), "w+")
+	for i in range(lower_num, upper_num):
+		f = open("recipe"+str(i+1)+".txt", "w+")
 		f.write("Experimental pie number "+str(i+1)+"!\n\n")
-		f.write("Ingredients:\n")
-		f.write("For the filling:\n")
+
 		all_chosen_ingredients = []
 		#Pies are either meat or fruit. Print the filling ingredients.
 		if(random.choice([0,1])):
 			meat_pie_ingredients_list = choose_ingredients(all_meat_pie_ingredients)
+			f.write("Fruit Pie\n")
+			f.write("Ingredients:\n")
+			f.write("For the filling:\n")
 			print_ingredient_amounts(f, meat_pie_ingredients_list)
 			all_chosen_ingredients = list(itertools.chain.from_iterable(meat_pie_ingredients_list))
 		else:
 			fruit_pie_ingredients_list = choose_ingredients(all_fruit_pie_ingredients)
+			f.write("Meat Pie\n")
+			f.write("Ingredients:\n")
+			f.write("For the filling:\n")
 			print_ingredient_amounts(f, fruit_pie_ingredients_list)
 			all_chosen_ingredients = list(itertools.chain.from_iterable(fruit_pie_ingredients_list))
 
