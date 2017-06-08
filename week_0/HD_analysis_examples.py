@@ -50,6 +50,8 @@ def num_files_by_type(path):
             file_type_counts[file_extension] += 1
     return file_type_counts
 
+
+
 def main():
     path = os.getcwd() + "/tree/"
     number_of_directories = num_directories(path)
