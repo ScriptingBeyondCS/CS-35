@@ -155,7 +155,9 @@ def recipe_dirs_generator(n,k, recipe_num=0):
         except: # this should never happen
                 print("IT'S HAPPENINGGGGGG")
 def drive_constructor():
-        """ main takes no arguments
+        """ Drive_constructor takes no arguments.  Calling it will
+            create a fictitious grutor's hard drive, complete with
+            nested file directory to
         """
         try:
                 subprocess.call("mkdir kidnapped_grutor")
@@ -178,7 +180,7 @@ def drive_constructor():
         os.makedirs("Desktop")
         os.chdir("Desktop")
         #
-        recipe_dirs_generator(1000, 0, recipe_num = 5)
+        recipe_dirs_generator(100, 100, recipe_num = 5)
         #
         os.makedirs("Desktop_1")
         os.chdir("Desktop_1")
