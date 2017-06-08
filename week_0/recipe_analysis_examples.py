@@ -27,6 +27,40 @@ def fewest_ingredients(path):
                 fewest_ingredients_file_path = os.path.join(root, f)
     return fewest_ingredients_file_path, (fewest_ingredients-7)
 
+#Check if a given recipe is a savory pie
+def is_savory(recipe):
+    """ Takes a recipe and determines if it is Savory
+    """
+    r = recipe.read()
+    if "Savory" in r:
+        return True
+    else:
+        return False
+
+def is_sweet(recipe):
+    return not is_savory(recipe)
+
+def list_recipes_by_condition(path, condition):
+    """ Takes a path and a condition function and returns a list of all recipes
+        at or below that path that satisfy the given condition
+    """
+    recipes = []
+    for root, directories, files in os.walk(path):
+        for f in files:
+            with open(os.path.join(root, f), 'r') as f_in:
+                if(condition(f_in)):
+                    recipes.append(os.path.join(root, f))
+    return recipes
+
+
+def move_recipes_by_condition(path, directory_name, condition):
+    """ Moves the recipes that satisfy conditon to a new directory called directory_name
+    """
+    os.mkdir(directory_name)
+    recipe_list = list_recipes_by_condition(path, condition)
+    for recipe in recipe_list:
+        shutil.move(recipe, os.getcwd()+"/"+directory_name)
+
 
 #Check if a given recipe is vegetarian i.e. no chicken, pork, or beef.
 def is_vegetarian(recipe):
@@ -66,10 +100,11 @@ def move_veg_recipes(from_path):
 
 #Comparing all recipes, which has the most measurements in volume rather than weight?
 
-
 def main():
     # Generate a tree of recipes for testing
-    shutil.rmtree("recipes")
+    ls = os.listdir()
+    if "recipes" in ls:
+        shutil.rmtree("recipes")
     os.mkdir("recipes")
     os.chdir("recipes")
     recipe_generator.generate_recipes(50)
@@ -83,8 +118,9 @@ def main():
     path = os.getcwd()
     fewest_ingredients_answer = fewest_ingredients(path)
     print(fewest_ingredients_answer)
-    veg_recipes = list_veg_recipes(path)
-    move_veg_recipes(path)
+    move_recipes_by_condition(path, "savory_recipes", is_savory)
+    move_recipes_by_condition(path, "sweet_recipes", is_sweet)
+    move_recipes_by_condition(path+"/savory_recipes","savory_recipes/vegetarian_recipes", is_vegetarian)
 
 
 

@@ -34,14 +34,14 @@ def generate_recipes(upper_num, lower_num = 0):
 		#Pies are either meat or fruit. Print the filling ingredients.
 		if(random.choice([0,1])):
 			meat_pie_ingredients_list = choose_ingredients(all_meat_pie_ingredients)
-			f.write("Fruit Pie\n")
+			f.write("Savory Pie\n")
 			f.write("Ingredients:\n")
 			f.write("For the filling:\n")
 			print_ingredient_amounts(f, meat_pie_ingredients_list)
 			all_chosen_ingredients = list(itertools.chain.from_iterable(meat_pie_ingredients_list))
 		else:
 			fruit_pie_ingredients_list = choose_ingredients(all_fruit_pie_ingredients)
-			f.write("Meat Pie\n")
+			f.write("Sweet Pie\n")
 			f.write("Ingredients:\n")
 			f.write("For the filling:\n")
 			print_ingredient_amounts(f, fruit_pie_ingredients_list)
