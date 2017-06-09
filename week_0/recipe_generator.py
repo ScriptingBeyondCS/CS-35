@@ -5,8 +5,10 @@ import itertools
 
 
 weights = ['kilograms', 'ounces', 'grams', 'pounds']
+weights_metric = ['kilograms', 'grams']
+weights_imperial = ['ounces', 'pounds']
 volumes = ['cups', 'teaspoons', 'tablespoons']
-one_ingredient_instructions = [('Chop the ', '.'), ('Stir in the ', '.'), ('Heat up the ', '.'), ('Add the ', '.'), ('Simmer the ', ' on low heat.')]
+one_ingredient_instructions = [('Chop the ', '.'), ('Mash up the ', '.'), ('Stir in the ', '.'), ('Heat up the ', '.'), ('Add the ', '.'), ('Simmer the ', ' on low heat.')]
 two_ingredient_instructions = [('Combine the ', ' and the ', '.'), ("Mix the ", " and the ", " together.")]
 
 meats = ['chicken', 'beef', 'pork', 'tofu']
