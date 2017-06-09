@@ -356,14 +356,14 @@ def getFirstName(string):
 
 # MAIN
 def main():
-    print(countFilesOfType('phone_files', '.txt'))
-    print(findMaxDepth('phone_files'))
-    print(countHaveTenDigits('phone_files'))
-    print(count909AreaCode('phone_files'))
-    print(countLastName('phone_files', 'DAVIS'))
-    print(countFirstName('phone_files', 'DAVIS'))
-    print(countInitials('phone_files', 'J', 'S'))
-    print(diffFirstName('phone_files'))
+    print(countFilesOfType('phone_files', '.txt')) # 9893
+    print(findMaxDepth('phone_files')) # 4, 'phone_files/86/Hidden/Deeper/Deepest'
+    print(countHaveTenDigits('phone_files')) # 3988
+    print(count909AreaCode('phone_files'))  # 17
+    print(countLastName('phone_files', 'DAVIS')) # 224
+    print(countFirstName('phone_files', 'DAVIS'))# 3
+    print(countInitials('phone_files', 'J', 'S')) # 105
+    print(diffFirstName('phone_files'))# 224
 
 # got some inconsistent answers first Name, last Name not working
 if __name__ == "__main__":
