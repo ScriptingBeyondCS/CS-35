@@ -28,7 +28,7 @@ def dir_generator(n, depth, max_recipes=0,  dirtype_string=""):
                 return
 
         if max_recipes>0:
-                num_recipes = random.choice(list(range(1,max_recipes)))
+                num_recipes = random.choice(list(range(max_recipes)))
                 recipe_generator.generate_recipes(num_recipes)
 
 
@@ -160,12 +160,12 @@ def main_drive_constructor():
             nested file directory to recipes etc.
         """
         try:
-                subprocess.call("mkdir kidnapped_grutor")
+                subprocess.call("mkdir benevolent_grutor")
         except OSError:
-                os.system("rm -rf kidnapped_grutor/")
-                os.makedirs("kidnapped_grutor")
+                os.system("rm -rf benevolent_grutor/")
+                os.makedirs("benevolent_grutor")
         #### Make grutor's hard drive directory
-        os.chdir("kidnapped_grutor")
+        os.chdir("benevolent_grutor")
 
         ### Make computer directories
         ##
@@ -217,12 +217,12 @@ def extra_credit_drive_constructor():
             of a tree (at least, in some sense)
         """
         try:
-                subprocess.call("mkdir kidnapped_grutor_EC")
+                subprocess.call("mkdir benevolent_grutor_EC")
         except OSError:
-                os.system("rm -rf kidnapped_grutor_EC/")
-                os.makedirs("kidnapped_grutor_EC")
+                os.system("rm -rf benevolent_grutor_EC/")
+                os.makedirs("benevolent_grutor_EC")
         #### Make grutor's hard drive directory
-        os.chdir("kidnapped_grutor_EC")
+        os.chdir("benevolent_grutor_EC")
 
         ### Make computer directories
         ##
@@ -239,10 +239,25 @@ def extra_credit_drive_constructor():
         #
         recipe_dirs_generator(100, 500, recipe_num = 5)
         #
-        os.makedirs("Desktop_1")
-        os.chdir("Desktop_1")
-        os.makedirs("Screenshots")
-        os.makedirs("More screenshots")
+        os.makedirs("High school stuff")
+        os.chdir("college")
+        os.makedirs("old courses")
+        os.chdir("old courses")
+        os.makedirs("Probstab me (math 35)")
+        os.chdir("Probstab me (math 35)")
+        os.makedirs("R you serious")
+        os.makedirs("final project")
+        os.chdir("..")
+        os.makedirs("CS 5")
+        os.chdir("CS 5")
+        os.makedirs("Hmmm")
+        os.makedirs("final projrekt")
+        os.makedirs("hws")
+        for i in range(12):
+                os.makedirs(str(i))
+        os.makedirs("suffering")
+        os.chdir("suffering")
+        os.chdir("..")
         os.makedirs("stuff")
         os.makedirs("fklasdfjewa")
         os.chdir("..")
